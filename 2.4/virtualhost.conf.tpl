@@ -18,6 +18,8 @@ LoadModule proxy_fcgi_module modules/mod_proxy_fcgi.so
 
     DocumentRoot {{ $DOCUMENT_ROOT }}
     <Directory {{ $DOCUMENT_ROOT }}>
+        DirectoryIndex index.html index.php
+
         Options FollowSymlinks
         AllowOverride All
         Require all granted

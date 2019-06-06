@@ -11,8 +11,11 @@
     Alias /php5-fcgi /usr/lib/cgi-bin/php5-fcgi
     FastCgiExternalServer /usr/lib/cgi-bin/php5-fcgi -host {{ $PHP_CONTAINER_NAME }}:9000 -idle-timeout {{ default .Env.FASTCGI_IDLE_TIMEOUT "90" }} -pass-header Authorization
 
+
     DocumentRoot {{ $DOCUMENT_ROOT }}
     <Directory {{ $DOCUMENT_ROOT }}>
+        DirectoryIndex index.html index.php
+
         Options FollowSymlinks
         AllowOverride All
         Order Allow,Deny
