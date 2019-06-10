@@ -1,7 +1,13 @@
 FROM lephare/debian:wheezy
 
-RUN apt-get update && \
-    apt-get install -y apache2 curl && \
+COPY apt/sources.list /etc/apt/sources.list
+COPY apt/preferences.d/perl /etc/apt/preferences.d/perl
+
+RUN apt-get update \
+    && apt-get install -y --force-yes \
+      perl=5.14.2-21+deb7u3 perl-base=5.14.2-21+deb7u3 \
+      libgdbm3 libswitch-perl libclass-isa-perl \
+      apache2 curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
