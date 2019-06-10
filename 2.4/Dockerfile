@@ -3,7 +3,7 @@ FROM httpd:2.4
 ENV DOCKERIZE_VERISON v0.6.1
 
 RUN apt-get update && \
-    apt-get install -y curl && \
+    apt-get install -y curl ca-cacert && \
     curl -sL https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERISON/dockerize-linux-amd64-$DOCKERIZE_VERISON.tar.gz | tar xz -C /usr/local/bin && \
     apt-get remove -y curl && \
     apt-get clean && \
