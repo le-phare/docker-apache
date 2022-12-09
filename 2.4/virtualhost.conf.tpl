@@ -1,6 +1,6 @@
 {{ $DOCUMENT_ROOT := default .Env.DOCUMENT_ROOT "/var/www/symfony/web" }}
 {{ $APACHE_LOG_DIR := default .Env.APACHE_LOG_DIR "/var/log/apache2" }}
-{{ $APACHE_LOG_PREFIX := default .Env.APACHE_LOG_PREFIX "symfony" }}
+{{ $APACHE_LOG_PREFIX := default .Env.APACHE_LOG_PREFIX "app" }}
 {{ $PHP_CONTAINER_NAME := default .Env.PHP_CONTAINER_NAME "php" }}
 
 LoadModule deflate_module modules/mod_deflate.so
@@ -9,12 +9,21 @@ LoadModule expires_module modules/mod_expires.so
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_fcgi_module modules/mod_proxy_fcgi.so
 
+{{ if isTrue .Env.FF_BROTLI }}
+LoadModule brotli_module modules/mod_brotli.so
+{{ end }}
+
 <VirtualHost *:80>
     UseCanonicalName Off
 
     RewriteEngine on
     RewriteCond {{ $DOCUMENT_ROOT }}/%{REQUEST_FILENAME} -f
     RewriteRule ^/(.*\.php(/.*)?)$ fcgi://{{ $PHP_CONTAINER_NAME }}:9000{{ $DOCUMENT_ROOT }}/$1 [L,P]
+
+    {{ if isTrue .Env.FF_BROTLI }}
+        AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/xml text/css text/javascript application/javascript
+        BrotliCompressionQuality {{ default .Env.BROTLI_COMPRESS_LEVEL "4" }}
+    {{ end }}
 
     DocumentRoot {{ $DOCUMENT_ROOT }}
     <Directory {{ $DOCUMENT_ROOT }}>
