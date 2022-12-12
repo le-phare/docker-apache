@@ -1,6 +1,11 @@
 FROM httpd:2.4
 
+ARG PUID
+ENV PUID ${PUID:-1000}
+
 ENV DOCKERIZE_VERISON v0.6.1
+ENV DOCUMENT_ROOT /var/www/symfony/web
+ENV FF_BROTLI false
 
 RUN apt-get update && \
     apt-get install -y curl ca-certificates && \
@@ -10,11 +15,14 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN mkdir /var/log/apache2
-RUN chmod +x /usr/local/bin/dockerize && mkdir -p /etc/dockerize/templates
+RUN chmod +x /usr/local/bin/dockerize \
+    && mkdir -p /etc/dockerize/templates \
+    && mkdir -p ${DOCUMENT_ROOT} \
+    && echo "<title></title><body></body>" > ${DOCUMENT_ROOT}/index.html
 
 RUN sed -i 's/#Include conf\/extra\/httpd-vhosts.conf/Include conf\/extra\/httpd-vhosts.conf/' /usr/local/apache2/conf/httpd.conf
 
 ENTRYPOINT ["dockerize", "-template", "/etc/dockerize/templates/virtualhost.conf.tpl:/usr/local/apache2/conf/extra/httpd-vhosts.conf"]
-CMD usermod -u 1000 daemon && httpd-foreground
+CMD usermod -u $PUID daemon && httpd-foreground
 
 COPY virtualhost.conf.tpl /etc/dockerize/templates/virtualhost.conf.tpl
