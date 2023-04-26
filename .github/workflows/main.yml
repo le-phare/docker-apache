@@ -35,9 +35,8 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_PASSWORD }}
-
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker meta
         id: meta
@@ -47,12 +46,12 @@ jobs:
           tags: |
             type=raw,${{ matrix.apache_version }}
 
-
       - uses: docker/build-push-action@v4
         with:
           push: ${{ github.event_name != 'pull_request' }}
           context: "{{defaultContext}}:${{ matrix.apache_version }}"
-          repository: lephare/apache
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: ${{ steps.setup-buildx.outputs.platforms }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
