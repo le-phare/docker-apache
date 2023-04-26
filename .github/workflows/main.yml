@@ -51,7 +51,7 @@ jobs:
       - uses: docker/build-push-action@v4
         with:
           push: ${{ github.event_name != 'pull_request' }}
-          path: ${{ matrix.apache_version }}
+         context: "{{defaultContext}}:${{ matrix.apache_version }}"
           repository: lephare/apache
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
