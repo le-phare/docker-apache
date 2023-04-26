@@ -18,8 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
+      fail-fast: false
       matrix:
-        apache_version: ['2.4']
+        apache_version:
+            - '2.2'
+            - '2.4'
 
     steps:
       - uses: actions/checkout@v2
