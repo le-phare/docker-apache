@@ -55,5 +55,6 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           path: ${{ matrix.apache_version }}
           repository: lephare/apache
-          tags: ${{ matrix.apache_version }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           platforms: ${{ steps.setup-buildx.outputs.platforms }}
