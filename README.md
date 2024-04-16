@@ -1,49 +1,34 @@
-# Apache Containers
+# lephare/apache Docker image
 
-Reference apache containers for our stack
+Reference Apache 2.4 container for [Le Phare](https://www.lephare.com) projects
 
 ## Usage
 
-```shell
+```yaml
+services:
+  php:
+    image: lephare/php:latest
+    # ...
 
-docker run -p '8000:80' lephare/apache:2.4
-
+  web:
+    image: lephare/apache:2.4
+    volumes_from:
+      - php:ro
+    labels:
+      caddy: "app.${DOCKER_HOST_SUFFIX:-local}"
+      caddy.tls: internal
+      caddy.reverse_proxy: "{{ upstreams }}"
+    environment:
+      DOCUMENT_ROOT: "/var/www/symfony/public"
 ```
 
 ## Configuration
 
-You can change settings by adding an environment var to the container.
+The following settings can be adjusted using environment variables.
 
-| Variable              | Type   | Description                    | Default              |
-|-----------------------|--------|--------------------------------|----------------------|
-| PUID                  | int    | Allows to change uid of apache | 1000                 |
-| DOCUMENT_ROOT         | string | Set document root              | /var/www/symfony/web |
-| APACHE_LOG_DIR        | string | Set log directory              | /var/log/apache2     |
-| APACHE_LOG_PREFIX     | string | Set log prefix                 | app                  |
-| PHP_CONTAINER_NAME    | string | Configure php service name     | php                  |
-
-## Examples
-
-```shell
-docker run \
-    -e FF_BROTLI=true \
-    -e DOCUMENT_ROOT=/var/www/html \
-    -e PHP_CONTAINER_NAME=app \
-    -p '8000:80'
-    -v $(pwd):/var/www/html
-    lephare/apache:2.4
-```
-
-## Feature Flags (only available on 2.4)
-
-
-| Variable              | Type | Description                  | Default |
-|-----------------------|------|------------------------------|---------|
-| FF_BROTLI             | bool | Enable brotli compression    | false   |
-
-
-### Brotli configuration
-
-| Variable              | Type | Description                  | Default |
-|-----------------------|------|------------------------------|---------|
-| BROTLI_COMPRESS_LEVEL | int  | Set brotli compression level | 4       |
+| Variable           | Type   | Description                                                                         | Default                   |
+|--------------------|--------|-------------------------------------------------------------------------------------|---------------------------|
+| DOCUMENT_ROOT      | string | [Apache DocumentRoot](https://httpd.apache.org/docs/2.4/mod/core.html#documentroot) | `/var/www/symfony/web`    |
+| APACHE_LOG_DIR     | string | [Apache log directory](https://httpd.apache.org/docs/2.4/logs.html)                 | `/var/log/apache2`        |
+| APACHE_LOG_PREFIX  | string | Apache log filename prefix                                                          | `app`                     |
+| PHP_CONTAINER_NAME | string | PHP-FPM Docker container name / hostname                                            | `php`                     |
