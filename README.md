@@ -2,10 +2,6 @@
 
 Reference apache containers for our stack
 
-## Disclaimer
-
-`lephare/apache:2.2` is considered archived, configuration is kept for documentation purpose only.
-
 ## Usage
 
 ```shell

@@ -1,8 +1,0 @@
-apache:
-  build: .
-  environment:
-    DOCUMENT_ROOT: /path/to/an/alternate/document/root
-    APACHE_LOG_DIR: /path/to/an/alternate/log/dir
-    APACHE_LOG_PREFIX: log_prefix
-  ports:
-    - 80

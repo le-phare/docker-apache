@@ -22,7 +22,7 @@ RUN chmod +x /usr/local/bin/dockerize \
 
 RUN sed -i 's/#Include conf\/extra\/httpd-vhosts.conf/Include conf\/extra\/httpd-vhosts.conf/' /usr/local/apache2/conf/httpd.conf
 
-ENTRYPOINT ["dockerize", "-template", "/etc/dockerize/templates/virtualhost.conf.tpl:/usr/local/apache2/conf/extra/httpd-vhosts.conf"]
+ENTRYPOINT ["dockerize", "-template", "/etc/dockerize/templates/virtualhost.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf"]
 CMD usermod -u $PUID daemon && httpd-foreground
 
-COPY virtualhost.conf.tpl /etc/dockerize/templates/virtualhost.conf.tpl
+COPY virtualhost.conf /etc/dockerize/templates/virtualhost.conf
