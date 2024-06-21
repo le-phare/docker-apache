@@ -7,4 +7,5 @@ services:
           - linux/amd64
           - linux/arm64
       tags:
+        - lephare/apache:2.4
         - lephare/apache:latest
