@@ -1,0 +1,10 @@
+services:
+  apache:
+    image: lephare/apache:2.4
+    build:
+      x-bake:
+        platforms:
+          - linux/amd64
+          - linux/arm64
+      tags:
+        - lephare/apache:latest
