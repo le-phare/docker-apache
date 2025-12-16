@@ -1,9 +1,12 @@
+# syntax=docker/dockerfile:1
+# check=error=true
+
 FROM httpd:2.4
 
-ENV APACHE_LOG_DIR /var/log/apache2
-ENV APACHE_LOG_PREFIX app
-ENV DOCUMENT_ROOT /var/www/symfony/web
-ENV PHP_CONTAINER_NAME php
+ENV APACHE_LOG_DIR=/var/log/apache2
+ENV APACHE_LOG_PREFIX=app
+ENV DOCUMENT_ROOT=/var/www/symfony/web
+ENV PHP_CONTAINER_NAME=php
 
 RUN mkdir "${APACHE_LOG_DIR}" && \
     sed -i \
